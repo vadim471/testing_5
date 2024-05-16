@@ -13,16 +13,9 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    private final StudentClient studentClient;
-
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
-
-    public String getRandomJoke(){
-        return studentClient.getJoke().getValue();
-    }
-
     public void addStudent(Student student) {
         Boolean existsEmail = studentRepository
                 .selectExistsEmail(student.getEmail());
@@ -30,7 +23,6 @@ public class StudentService {
             throw new BadRequestException(
                     "Email " + student.getEmail() + " taken");
         }
-        student.setJoke(this.getRandomJoke());
         studentRepository.save(student);
     }
 

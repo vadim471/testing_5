@@ -23,11 +23,6 @@ public class StudentController {
         studentService.addStudent(student);
     }
 
-    @GetMapping("/joke")
-    public String getRandomJoke() {
-        return studentService.getRandomJoke();
-    }
-
     @DeleteMapping(path = "{studentId}")
     public void deleteStudent(
             @PathVariable("studentId") Long studentId) {
