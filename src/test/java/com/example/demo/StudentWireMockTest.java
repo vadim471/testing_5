@@ -28,7 +28,7 @@ public class StudentWireMockTest {
     private StudentController controller;
 
     @Test
-    public void foo() {
+    public void studentWireMockTest() {
         String path = null;
         try {
             path = new URL(chuckUrl).getPath();

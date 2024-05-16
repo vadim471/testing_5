@@ -30,7 +30,7 @@ public class StudentService {
             throw new BadRequestException(
                     "Email " + student.getEmail() + " taken");
         }
-        student.setJoke(studentClient.getJoke().getValue());
+        student.setJoke(this.getRandomJoke());
         studentRepository.save(student);
     }
 
