@@ -39,6 +39,8 @@ public class Student {
 
     private String joke;
 
+    private int bookingId;
+
     public Student(String name, String email, Gender gender) {
         this.name = name;
         this.email = email;

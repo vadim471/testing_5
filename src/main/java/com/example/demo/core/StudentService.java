@@ -1,9 +1,11 @@
 package com.example.demo.core;
 
+import com.example.demo.integration.BookingClient;
 import com.example.demo.integration.ChuckClient;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.StudentNotFoundException;
 import com.example.demo.model.Student;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +18,17 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ChuckClient chuckClient;
+    private final BookingClient bookingClient;
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
-    public Optional<Student> getStudent(Long studentId) {
-        return studentRepository.findById(studentId);
+    public Student getStudent(Long studentId) {
+        return studentRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException("dsa"));
     }
 
-    public void addStudent(Student student) {
+    public void addStudent(Student student) throws JsonProcessingException {
         Boolean existsEmail = studentRepository
                 .selectExistsEmail(student.getEmail());
         if (existsEmail) {
@@ -33,6 +36,7 @@ public class StudentService {
                     "Email " + student.getEmail() + " taken");
         }
         student.setJoke(chuckClient.getJoke().getValue());
+        student.setBookingId(bookingClient.createBooking());
         studentRepository.save(student);
     }
 

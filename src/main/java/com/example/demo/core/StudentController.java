@@ -1,6 +1,7 @@
 package com.example.demo.core;
 
 import com.example.demo.model.Student;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +22,14 @@ public class StudentController {
     }
 
     @GetMapping(path = "{studentId}")
-    public Optional<Student> getStudent(
+    public Student getStudent(
             @PathVariable("studentId") Long studentId
     ) {
         return studentService.getStudent(studentId);
     }
 
     @PostMapping
-    public void addStudent(@Valid @RequestBody Student student) {
+    public void addStudent(@Valid @RequestBody Student student) throws JsonProcessingException {
         studentService.addStudent(student);
     }
 
