@@ -29,7 +29,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public void addStudent(@Valid @RequestBody Student student) {
+    public void addStudent(@Valid @RequestBody Student student) throws JsonProcessingException {
         studentService.addStudent(student);
     }
 
