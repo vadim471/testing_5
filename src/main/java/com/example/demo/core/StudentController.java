@@ -22,14 +22,14 @@ public class StudentController {
     }
 
     @GetMapping(path = "{studentId}")
-    public Student getStudent(
+    public Optional<Student> getStudent(
             @PathVariable("studentId") Long studentId
     ) {
         return studentService.getStudent(studentId);
     }
 
     @PostMapping
-    public void addStudent(@Valid @RequestBody Student student) throws JsonProcessingException {
+    public void addStudent(@Valid @RequestBody Student student) {
         studentService.addStudent(student);
     }
 

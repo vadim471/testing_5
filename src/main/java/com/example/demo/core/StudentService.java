@@ -1,14 +1,14 @@
 package com.example.demo.core;
 
-import com.example.demo.integration.ChuckClient;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.StudentNotFoundException;
+import com.example.demo.integration.ChuckClient;
 import com.example.demo.model.Student;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -21,11 +21,11 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Student getStudent(Long studentId) {
-        return studentRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException("dsa"));
+    public Optional<Student> getStudent(Long studentId) {
+        return studentRepository.findById(studentId);
     }
 
-    public void addStudent(Student student) throws JsonProcessingException {
+    public void addStudent(Student student) {
         Boolean existsEmail = studentRepository
                 .selectExistsEmail(student.getEmail());
         if (existsEmail) {
