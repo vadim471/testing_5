@@ -1,6 +1,5 @@
 package com.example.demo.core;
 
-import com.example.demo.integration.BookingClient;
 import com.example.demo.integration.ChuckClient;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.StudentNotFoundException;
@@ -10,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -18,7 +16,6 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ChuckClient chuckClient;
-    private final BookingClient bookingClient;
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
@@ -36,7 +33,6 @@ public class StudentService {
                     "Email " + student.getEmail() + " taken");
         }
         student.setJoke(chuckClient.getJoke().getValue());
-        student.setBookingId(bookingClient.createBooking());
         studentRepository.save(student);
     }
 
