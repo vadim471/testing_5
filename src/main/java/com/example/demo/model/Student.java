@@ -1,4 +1,4 @@
-package com.example.demo.student;
+package com.example.demo.model;
 
 import lombok.*;
 
@@ -36,6 +36,8 @@ public class Student {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender gender;
+
+    private String joke;
 
     public Student(String name, String email, Gender gender) {
         this.name = name;

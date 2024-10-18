@@ -1,21 +1,30 @@
-package com.example.demo.student;
+package com.example.demo.core;
 
-import com.example.demo.student.exception.BadRequestException;
-import com.example.demo.student.exception.StudentNotFoundException;
+import com.example.demo.integration.ChuckClient;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.StudentNotFoundException;
+import com.example.demo.model.Student;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final ChuckClient chuckClient;
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
+
+    public Optional<Student> getStudent(Long studentId) {
+        return studentRepository.findById(studentId);
+    }
+
     public void addStudent(Student student) {
         Boolean existsEmail = studentRepository
                 .selectExistsEmail(student.getEmail());
@@ -23,6 +32,7 @@ public class StudentService {
             throw new BadRequestException(
                     "Email " + student.getEmail() + " taken");
         }
+        student.setJoke(chuckClient.getJoke().getValue());
         studentRepository.save(student);
     }
 
