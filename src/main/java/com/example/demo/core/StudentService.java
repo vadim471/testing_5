@@ -37,7 +37,7 @@ public class StudentService {
                     "Email " + student.getEmail() + " taken");
         }
         student.setJoke(chuckClient.getJoke().getValue());
-        student.setBookingId(bookingClient.createBooking());
+        student.setBookingId(bookingClient.createBooking(student.getName()));
         studentRepository.save(student);
     }
 
