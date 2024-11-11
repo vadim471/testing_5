@@ -9,8 +9,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -45,9 +47,14 @@ public class BookingClient {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Booking> entity = new HttpEntity<>(bookingRequest, headers);
-        var result = restTemplate.postForObject(properties.getUrl() + BOOKING_PATH, entity, BookingResponse.class);
-
-        return result.getBookingId();
+        try {
+            var result = restTemplate.postForObject(properties.getUrl() + BOOKING_PATH, entity, BookingResponse.class);
+            return result.getBookingId();
+        } catch (HttpServerErrorException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                return -1;
+            } throw e;
+        }
 
     }
 }

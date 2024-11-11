@@ -22,11 +22,14 @@ public class StudentService {
     private final BookingClient bookingClient;
 
     public List<Student> getAllStudents() {
+
         return studentRepository.findAll();
     }
 
-    public Optional<Student> getStudent(Long studentId) {
-        return studentRepository.findById(studentId);
+    public Student getStudent(Long studentId) {
+        return studentRepository.findById(studentId).orElseThrow(() -> {
+            throw new StudentNotFoundException(String.format("Студент с id = %d не был найден в базе данных", studentId));
+        });
     }
 
     public void addStudent(Student student) throws JsonProcessingException {

@@ -4,8 +4,10 @@ import com.example.demo.config.ChuckProperties;
 import com.example.demo.model.ChuckResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -19,13 +21,20 @@ public class ChuckClient {
     }
 
     public ChuckResponse getJoke() {
-        ResponseEntity<ChuckResponse> response = restTemplate.exchange(
-                properties.getUrl(),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                });
-        return response.getBody();
+        try {
+            ResponseEntity<ChuckResponse> response = restTemplate.exchange(
+                    properties.getUrl(),
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {
+                    });
+            return response.getBody();
+        } catch (HttpServerErrorException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                return new ChuckResponse("Random joke");
+            }
+            throw e;
+        }
 
     }
 }
